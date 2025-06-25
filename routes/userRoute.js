@@ -7,4 +7,6 @@ route.get("/users", getAllUsers);
 route.put("/update/:_id", updateUser);
 route.delete("/delete/:_id", deleteUser);
 
+
+
 export default route;
