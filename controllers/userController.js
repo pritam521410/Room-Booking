@@ -1,4 +1,5 @@
-import {User} from "../model/user.js";
+import User from "../model/user.js";
+import bcrypt from "bcryptjs";
 
 export const userRegister = async (req, res) => {
   const { name, email, password,userid, phone } = req.body;
@@ -20,17 +21,18 @@ export const userRegister = async (req, res) => {
 };
 
 export const userLogin = async(req,res) =>{
-   const {email , password} = req.body;
-   try{
+   const {email, password} = req.body;
+   try {
        const user=await User.findOne({email});
-       if(!user){
-         return res.status(404).json({message:"User not found"});
+       if(user){
+        const isMatch = await bcrypt.compare(password, user.password)
+          if(isMatch)
+          {
+          res.status(200).json({message: "user logged in successfully", user})
+          }
        }
-       if(password != user.password){
-         return res.status(404).json({message:"incorrect password"});
-       }
-       return res.status(200).json({message:"User loggedin successfully"});
-   }catch(err){
+      }         
+ catch(err){
     return res.status(500).json({message:"Internal error"})
    }
 }
@@ -94,3 +96,18 @@ export const  deleteUser=async(req, res)=>{
 };
   
 
+export const updateByCustomId = async()=>{
+     const {tempId}= req.params;
+     console.log("id ",tempId);
+     const {name,phone} = req.body;
+
+     try {
+           const user= await User.findByIdAndUpdate({tempId},{name, phone}, {new:true});
+           if(user){
+              return res.status(200).json({message:"updated successfully", user})
+           }
+
+     } catch (error) {
+        return res.status(500).json({message:"internal server error"})
+     }
+}

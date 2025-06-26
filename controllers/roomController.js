@@ -20,7 +20,7 @@ export const  RoomBook = async(req , res)=>{
 }
 
 export const getAllRoom=async(req ,res)=>{
-  const{contact, startDate, endDate}=req.query;
+  const{contact, startDate, endDate,jdalka}=req.body;
     try {
       const filter = {};
       if(contact)
@@ -69,13 +69,21 @@ export const  deleteRoom=async(req, res)=>{
 };
 
 export const getSingleRoom = async(req, res)=>{
-    const {contact , startDate , endDate}=req.query;
+    const {bedType , startDate , endDate}=req.query;
     
     try {
         const filter = {};
-        if(contact){
-          filter.contact= new RegExp(contact ,"i");
+        if(bedType){
+          filter.bedType= new RegExp(bedType ,"i");
         }
+        if(startDate && endDate){
+            const start = new Date(`${startDate} 00:00:00`);
+            const end = new Date(`${endDate} 23:59:59`);
+            filter.createdAt={
+               $gte: start,
+               $lte: end 
+            }
+          }
          const room = await Room.find(filter);
 
          res.status(200).json({message:"room fetch successfully", room});
