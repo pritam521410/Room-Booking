@@ -23,9 +23,15 @@ const roomSchema = new mongoose.Schema({
     Price:{
         type:String,
         required: true
+    },
+    bedType:{
+        type:String,   
+    },
+    facility:{
+        type :String,
     }
   
 
-});
+}, {timestamps:true});
 
 export default mongoose.model("Room", roomSchema);

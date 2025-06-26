@@ -18,7 +18,24 @@ export const MakeTransaction = async(req , res)=>{
 }
 
 export const GetAlltransaction =async(req, res)=>{
+    const{paymentid,startDate, endDate}=req.query;
     try{
+         const filter = {};
+          if(paymentid)
+          {
+            filter.paymentid = new RegExp(paymentid, "i");
+           
+          }
+          if(startDate && endDate){
+            const start = new Date(`${startDate} 00:00:00`);
+            const end = new Date(`${endDate} 23:59:59`);
+            filter.createdAt={
+               $gte: start,
+               $lte: end 
+            }
+          }
+          const transaction = await Transaction.find(filter);
+          res.status(200).json({message:"Transaction fetch successfully", transaction});
         const paymentdetail= await Transaction.find();
         res.status(200).json({message: "all payment detail", paymentdetail});
     }

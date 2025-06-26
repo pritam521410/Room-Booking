@@ -20,6 +20,7 @@ const TransactionSchema = new mongoose.Schema({
     paymentid:{
         type:String,
         required:true
-    }
-})
+    }},
+    {timestamps:true}
+);
 export default mongoose.model("Transaction" , TransactionSchema);

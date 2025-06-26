@@ -6,5 +6,5 @@ route.post("/book" ,RoomBook);
 route.get("/users",getAllRoom  );
 route.put("/update/:id",  UpdateRoom);
 route.delete("/delete/:id" ,deleteRoom);
-route.get("/single-room/:id",getSingleRoom)
+route.get("/single-room",getSingleRoom)
 export default route;

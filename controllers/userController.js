@@ -37,8 +37,28 @@ export const userLogin = async(req,res) =>{
 
 
 export const getAllUsers = async(req, res)=>{
+  const {name, email, startDate , endDate} = req.query;
+  
 try{
-  const user = await User.find();
+  const filter = {};
+  if(name)
+  {
+    filter.name = new RegExp(name, "i");
+   
+  }
+  if(email)
+  {
+    filter.email = email;
+  }
+  if(startDate && endDate){
+    const start = new Date(`${startDate} 00:00:00`);
+    const end = new Date(`${endDate} 23:59:59`);
+    filter.createdAt={
+      $gte: start,
+      $lte: end
+    }
+  }
+  const user = await User.find(filter);
   res.status(200).json({message:"user fetch successfully", user});
   
 }
